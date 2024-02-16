@@ -20,6 +20,7 @@ test("/postNote - Post a note", async () => {
     }),
   });
 
+  // Clear the DB for the next test
   delAll();
 
   const postNoteBody = await postNoteRes.json();
@@ -27,6 +28,7 @@ test("/postNote - Post a note", async () => {
   expect(postNoteBody.response).toBe("Note added successfully.");
 });
 
+// Added Test Case
 test("/getAllNotes - Return list of zero notes for getAllNotes", async () => {
   const getAllNotesRes = await fetch(`${SERVER_URL}/getAllNotes`, {
     method: "GET",
@@ -41,6 +43,7 @@ test("/getAllNotes - Return list of zero notes for getAllNotes", async () => {
   expect(getAllNotesBody.response.length).toBe(0);
 });
 
+// Added Test Case
 test("/getAllNotes - Return list of two notes for getAllNotes", async () => {
   for (let i = 0; i < 2; i++) {
     const res = await fetch(`${SERVER_URL}/postNote`, {
@@ -66,6 +69,8 @@ test("/getAllNotes - Return list of two notes for getAllNotes", async () => {
     },
   });
   const getTwoNotesBody = await getTwoNotesRes.json();
+
+  // Clearing DB for next test
   delAll();
 
   expect(getTwoNotesRes.status).toBe(200);
@@ -73,6 +78,7 @@ test("/getAllNotes - Return list of two notes for getAllNotes", async () => {
   expect(getTwoNotesBody.response.length).toBe(2);
 });
 
+// Added Test Case
 test("/deleteNote - Delete a note", async () => {
   const res = await fetch(`${SERVER_URL}/postNote`, {
     method: "POST",
@@ -102,6 +108,7 @@ test("/deleteNote - Delete a note", async () => {
   expect(deleteANoteBody.response).toBe(`Document with ID ${noteId} deleted.`);
 });
 
+// Added Test Case
 test("/patchNote - Patch with content and title", async () => {
   const res = await fetch(`${SERVER_URL}/postNote`, {
     method: "POST",
@@ -131,6 +138,8 @@ test("/patchNote - Patch with content and title", async () => {
   });
 
   const fullPatchBody = await fullPathRes.json();
+
+  // Clear the DB for the next test
   delAll();
 
   expect(fullPathRes.status).toBe(200);
@@ -169,6 +178,7 @@ test("/patchNote - Patch with just title", async () => {
   expect(titlePatchBody.response).toBe(`Document with ID ${noteIdpt} patched.`);
 });
 
+// Added Test Case
 test("/patchNote - Patch with just content", async () => {
   const res = await fetch(`${SERVER_URL}/postNote`, {
     method: "POST",
@@ -203,7 +213,9 @@ test("/patchNote - Patch with just content", async () => {
   );
 });
 
+// Added Test Case
 test("/deleteAllNotes - Delete one note", async () => {
+  // Clearing DB before running intended test
   delAll();
 
   const res = await fetch(`${SERVER_URL}/postNote`, {
@@ -233,6 +245,7 @@ test("/deleteAllNotes - Delete one note", async () => {
   expect(deleteOneNoteBody.response).toBe("1 note(s) deleted.");
 });
 
+// Added Test Case
 test("/deleteAllNotes - Delete three notes", async () => {
   for (let i = 0; i < 3; i++) {
     const res = await fetch(`${SERVER_URL}/postNote`, {
@@ -263,6 +276,7 @@ test("/deleteAllNotes - Delete three notes", async () => {
   expect(deleteANoteBody.response).toBe("3 note(s) deleted.");
 });
 
+// Added Test Case
 test("/updateNoteColor - Update color of a note to red (#FF0000)", async () => {
   const res = await fetch(`${SERVER_URL}/postNote`, {
     method: "POST",
@@ -279,7 +293,8 @@ test("/updateNoteColor - Update color of a note to red (#FF0000)", async () => {
   expect(res.status).toBe(200);
   const colourChangeNoteID = resBody.insertedId;
   expect(resBody.response).toBe("Note added successfully.");
-    
+
+  // Test colour
   let colour = "#afd332";
 
   const patchColourRes = await fetch(
@@ -301,6 +316,7 @@ test("/updateNoteColor - Update color of a note to red (#FF0000)", async () => {
   delAll();
 });
 
+// Helper Function
 const delAll = async () => {
   const delRes = await fetch(`${SERVER_URL}/deleteAllNotes`, {
     method: "DELETE",
@@ -308,5 +324,6 @@ const delAll = async () => {
       "Content-Type": "application/json",
     },
   });
+
   const delBody = await delRes.json();
 };
